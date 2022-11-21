@@ -80,6 +80,39 @@ http.createServer((req,res) => {
       res.end()
     })
     return
+  }else if(path === '/api/tasks' && method === 'GET'){
+    const resBody = JSON.stringify(tasks)
+    res.writeHead(200)
+    res.write(resBody)
+    res.end()
+    return
+  }else if(path === '/api/tasks' && method === 'POST'){
+    let requestBody = ''
+    req.on('data',(data) => {
+      requestBody += data
+    })
+
+    req.on('end', () => {
+      console.log(requestBody)
+      const requestBodyJson = JSON.parse(requestBody)
+      const title = requestBodyJson.title
+
+      if(title.length < 2){
+        res.writeHead(400)
+        res.end()
+      }
+
+      const newTask = {
+        title,
+        date: new Date()
+      }
+
+      tasks.push(newTask)
+
+      res.writeHead(201)
+      res.end()
+    })
+    return
   }
   res.writeHead(404)
   res.end()

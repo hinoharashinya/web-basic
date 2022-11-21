@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>タスク管理一覧</h1>
+  <h2>タスク登録</h2>
+    <input type="text" name="title" id="title">
+    <button type="submit" id="add-button" disabled>登録</button>
+  <h2>タスク一覧</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>タイトル</th>
+          <th>作成日時</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr>
+          <td>フロントエンドの実装</td>
+          <td>2022/12/11</td>
+        </tr>
+      </tbody>
+    </table>
+  <script src="./tasks.js"></script>
+</body>
+</html>
