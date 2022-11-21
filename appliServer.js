@@ -1,5 +1,8 @@
 const fs = require('fs')
 const http = require('http')
+const uid = require('uid-safe').sync
+
+const sessions = {}
 
 const PORT = 8080
 
@@ -12,6 +15,17 @@ const tasks = [
     title: 'バックエンドの実装',
     date: '2022/12/12',
   }
+]
+
+const users = [
+  {
+    id:1,
+    name:'alice',
+  },
+  {
+    id:2,
+    name:'bob',
+  },
 ]
 
 const getTasksHTML = () => {
@@ -112,6 +126,39 @@ http.createServer((req,res) => {
       res.writeHead(201)
       res.end()
     })
+    return
+  }else if(path === '/cookie-sample' && method === 'GET'){
+    res.setHeader('Set-Cookie','name=alice')
+    res.writeHead(200)
+    res.write('set-cooki')
+    res.end()
+    return
+  }else if(path === '/session-start' && method === 'GET'){
+    const userId = 1
+    const sessionId = uid(24)
+
+    sessions[sessionId] = {
+      userId
+    }
+
+    res.setHeader('Set-Cookie',`sid=${sessionId}`)
+    res.writeHead(200)
+    res.write('session start')
+    res.end()
+    return
+  }else if(path === '/me' && method === 'GET'){
+    const cookie = req.headers.cookie
+    const sessionId = cookie.split('=')[1]
+
+    const userId = sessions[sessionId].userId
+
+    const user = users.find((user) => {
+      return user.id === userId
+    })
+
+    res.writeHead(200)
+    res.write(`userId:${userId},user:${user.name}`)
+    res.end()
     return
   }
   res.writeHead(404)
